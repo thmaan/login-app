@@ -44,7 +44,7 @@ def createUserApi(request):
 	serializer = UserSerializer(data=data)
 	if serializer.is_valid():
 		serializer.save()
-		content = {'message': 'Hello, World!'}
+		content = {'message': 'new User OK!'}
 		return Response(content, status=201)
 	else:
 		return Response(status=500)
