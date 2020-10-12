@@ -7,7 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated  
+from rest_framework.decorators import authentication_classes
+from rest_framework.authentication import TokenAuthentication
 
 from django.contrib.auth.decorators import login_required
 
@@ -22,9 +25,11 @@ from rest_framework.response import Response
 from .serializers import CustomerSerializer, UserSerializer, LoginSerializer
 # Create your views here.
 
-class HelloView(APIView):
-	permission_classes = (IsAuthenticated,)  
-	def get(self,request):
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def hello(request):
+		permission_classes = (IsAuthenticated,)  
 		context={'message':'hi'}
 		return Response(context)
 
@@ -44,9 +49,11 @@ def registerPage(request):
 		context = {'form':form}
 		return render(request, 'accounts/register.html', context)
 
-@api_view(['POST'])
-def createUserApi(request):
 
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def createUserApi(request):
 	data = JSONParser().parse(request)
 	serializer = UserSerializer(data=data)
 	if serializer.is_valid():

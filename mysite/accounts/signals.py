@@ -6,6 +6,6 @@ from .models import Customer
 
 
 @receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
+def create_customer(sender, instance, created, **kwargs):
     if created:
-        userProfile.objects.create(user=instance)
+        customer.objects.create(user=instance)
