@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 
 from rest_framework.decorators import api_view
@@ -122,6 +122,17 @@ def customer(request, pk_test):
 	context = {'customer':customer, 'orders':orders, 'order_count':order_count,
 	'myFilter':myFilter}
 	return render(request, 'accounts/customer.html',context)
+
+@login_required(login_url='login')
+def createCustomer(request):
+	form = CustomerForm();
+	if request.method == 'POST':
+		form = CustomerForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('dashboard')
+	context = {'form':form }
+	return render(request,'accounts/customer.html',context)
 
 @login_required(login_url='login')
 def createOrder(request, pk):
