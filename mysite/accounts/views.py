@@ -15,11 +15,19 @@ from .models import *
 from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .serializers import CustomerSerializer, UserSerializer, LoginSerializer
 # Create your views here.
+
+class HelloView(APIView):
+	permission_classes = (IsAuthenticated,)  
+	def get(self,request):
+		context={'message':'hi'}
+		return Response(context)
+
 
 def registerPage(request):
 	if request.user.is_authenticated:
@@ -38,7 +46,6 @@ def registerPage(request):
 
 @api_view(['POST'])
 def createUserApi(request):
-	permission_classes = (IsAuthenticated,)
 
 	data = JSONParser().parse(request)
 	serializer = UserSerializer(data=data)
@@ -55,7 +62,7 @@ def loginApi(request):
 	data = JSONParser().parse(request)
 	serializer = LoginSerializer(data=data)
 	if serializer.is_valid():
-		content = { 'message': 'Logado com Sucesso'}
+		content = { 'message': 'Logged'}
 		return Response(content, status=201)
 	else:
 		return Response(status=500)
