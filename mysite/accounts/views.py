@@ -2,25 +2,20 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
-from rest_framework.parsers import JSONParser
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated  
-from rest_framework.decorators import authentication_classes
-from rest_framework.authentication import TokenAuthentication
-
 from django.contrib.auth.decorators import login_required
+
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated  
+from rest_framework.decorators import authentication_classes,permission_classes,api_view
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.response import Response
 
 from .models import *
 from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 
 from .serializers import CustomerSerializer, UserSerializer, LoginSerializer
 # Create your views here.
@@ -29,9 +24,8 @@ from .serializers import CustomerSerializer, UserSerializer, LoginSerializer
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def hello(request):
-		permission_classes = (IsAuthenticated,)  
-		context={'message':'hi'}
-		return Response(context)
+	context={'message':'hi'}
+	return Response(context)
 
 
 def registerPage(request):
@@ -144,25 +138,28 @@ def createCustomer(request):
 		form = CustomerForm(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect('dashboard')
+			return redirect('/')
 	context = {'form':form }
-	return render(request,'accounts/customer.html',context)
+	return render(request,'accounts/add_customer.html',context)
 
 @login_required(login_url='login')
-def createOrder(request, pk):
-	OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10 )
-	customer = Customer.objects.get(id=pk)
-	formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
-	#form = OrderForm(initial={'customer':customer})
+def createOrder(request):
+	#OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10 )
+	customer = Customer.objects.all()
+	#formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
+	form = OrderForm(initial={'customer':customer})
 	if request.method == 'POST':
 		#print('Printing POST:', request.POST)
 		form = OrderForm(request.POST)
-		formset = OrderFormSet(request.POST, instance=customer)
-		if formset.is_valid():
-			formset.save()
+		# formset = OrderFormSet(request.POST, instance=customer)
+		# if formset.is_valid():
+		# 	formset.save()
+		# 	return redirect('/')
+		if form.is_valid:
+			form.save()
 			return redirect('/')
 
-	context = {'form':formset}
+	context = {'form':form}
 	return render(request, 'accounts/order_form.html', context)
 
 @login_required(login_url='login')

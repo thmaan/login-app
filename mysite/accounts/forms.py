@@ -5,15 +5,27 @@ from django import forms
 
 from .models import Order, Customer
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 class CustomerForm(ModelForm):
 	class Meta:
 		model = Customer
 		fields = ['name', 'email', ]
-		
+
+	helper = FormHelper()
+	helper.form_method = 'POST'
+	helper.add_input(Submit('submit', 'Register', css_class='btn-success'))
+
 class OrderForm(ModelForm):
 	class Meta:
 		model = Order
-		fields = '__all__'
+		fields = ['customer', 'product', 'status', 'note', ]
+
+	helper = FormHelper()
+	helper.form_method = 'POST'
+	helper.add_input(Submit('submit', 'Register', css_class='btn-success'))
+
 
 class CreateUserForm(UserCreationForm):
 	class Meta:

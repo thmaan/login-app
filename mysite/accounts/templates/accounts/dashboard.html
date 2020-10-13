@@ -1,5 +1,5 @@
 {%  extends 'accounts/main.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 
 {%  include 'accounts/status.html' %}
@@ -13,16 +13,16 @@
 		<div class="card card-body">
 			<a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_customer' %}">Create Customer</a>
 			<table class="table table-sm">
-				<tr>
-					<th>Customer</th>
-					<th>Phone</th>
-				</tr>
+					<tr>
+						<th>Customer</th>
+						<th>Phone</th>
+					</tr>
 
 				{% for customer in customers %}
 					<tr>
-						<td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td>
 						<td>{{customer.name}}</td>
-						<td>{{customer.phone}}</td>
+						<td>{{customer.phone}}
+						<td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td></td>
 					</tr>
 				{% endfor %}
 
@@ -34,7 +34,7 @@
 		<h5>LAST 5 ORDERS</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-primary  btn-sm btn-block" href="">Create Order</a>
+			<a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_order' %}">Create Order</a>
 			<table class="table table-sm">
 				<tr>
 					<th>Product</th>
