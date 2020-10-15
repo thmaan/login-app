@@ -31,6 +31,8 @@ urlpatterns = [
     path('create-customer-api/', apiviews.createCustomerApi,name='create-customer-api'),
     path('delete-customer-api/', apiviews.deleteCustomerApi, name='delete-customer-api'),
 
+    path('products-api/', apiviews.productsApi,name='products-api'),
+    
     path('delete-order-api/<str:pk>', apiviews.deleteOrderApi, name="delete_order-api"),
     # path('update-order-api/<str:pk>', apiviews.updateOrderApi, name="update-order-api"),
 

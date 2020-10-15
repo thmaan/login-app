@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 from .models import *
 
-from .serializers import CustomerSerializer, UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer
+from .serializers import CustomerSerializer, UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer, ProductSerializerApi
 
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
@@ -36,12 +36,21 @@ def logoutUserApi(request):
 	logout(request)
 	return Response(status=200)
 
-@api_view(['POST'])
+@api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def customersApi(request):
 	customers = Customer.objects.all()
 	serializer = CustomerSerializerApi(customers, many=True)
+	
+	return Response(serializer.data, status=201)
+
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def productsApi(request):
+	products = Product.objects.all()
+	serializer = ProductSerializerApi(products, many=True)
 	
 	return Response(serializer.data, status=201)
 
