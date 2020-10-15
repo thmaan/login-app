@@ -13,7 +13,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
 from .models import *
-from .forms import OrderForm, CreateUserForm, CustomerForm
+from .forms import OrderForm, CreateUserForm, CustomerForm, CostumerProfileForm
 from .filters import OrderFilter
 
 
@@ -112,13 +112,19 @@ def home(request):
 	return render(request, 'accounts/dashboard.html', context)
 
 @login_required(login_url='login')
+def customers(request):
+	customers = Customer.objects.all()
+	
+	return render(request,'accounts/customers.html',{'customers':customers})
+
+@login_required(login_url='login')
 def products(request):
 	products = Product.objects.all()
 
 	return render(request, 'accounts/products.html', {'products':products})
 
 @login_required(login_url='login')
-def customer(request, pk_test):
+def customer(request):
 	customer = Customer.objects.get(id=pk_test)
 
 	orders = customer.order_set.all()
@@ -132,6 +138,17 @@ def customer(request, pk_test):
 	return render(request, 'accounts/customer.html',context)
 
 @login_required(login_url='login')
+def customerProfile(request, pk):
+	form = CostumerProfileForm()
+	if request.method == 'POST':
+		form = CostumerProfileForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	context = {'form':form }
+	return render(request,'accounts/costumer_profile.html',context)	
+
+@login_required(login_url='login')
 def createCustomer(request):
 	form = CustomerForm();
 	if request.method == 'POST':
@@ -143,11 +160,30 @@ def createCustomer(request):
 	return render(request,'accounts/add_customer.html',context)
 
 @login_required(login_url='login')
+def createOrder1(request):
+	OrderFormSet = inlineformset_factory(Customer, Order, 
+		fields=('product', 'statu	s'), extra=10 )
+	customer = Customer.objects.all()
+	formset = OrderFormSet(queryset=Order.objects.none()
+		,instance=customer)
+	#form = OrderForm(initial={'customer':customer})
+	if request.method == 'POST':
+		#print('Printing POST:', request.POST)
+		form = OrderForm(request.POST)
+		formset = OrderFormSet(request.POST, instance=customer)
+		if formset.is_valid():
+			formset.save()
+			return redirect('/')
+
+	context = {'form':formset}
+	return render(request, 'accounts/order_form.html', context)
+
+@login_required(login_url='login')
 def createOrder(request):
 	#OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10 )
-	customer = Customer.objects.all()
+	#customer = Customer.objects.all()
 	#formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-	form = OrderForm(initial={'customer':customer})
+	form = OrderForm()
 	if request.method == 'POST':
 		#print('Printing POST:', request.POST)
 		form = OrderForm(request.POST)

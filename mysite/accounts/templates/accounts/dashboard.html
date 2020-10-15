@@ -15,14 +15,12 @@
 			<table class="table table-sm">
 					<tr>
 						<th>Customer</th>
-						<th>Phone</th>
 					</tr>
 
 				{% for customer in customers %}
 					<tr>
 						<td>{{customer.name}}</td>
-						<td>{{customer.phone}}
-						<td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td></td>
+						<td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.pk %}">View</a></td></td>
 					</tr>
 				{% endfor %}
 

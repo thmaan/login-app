@@ -8,10 +8,11 @@ from .models import Order, Customer
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+
 class CustomerForm(ModelForm):
 	class Meta:
 		model = Customer
-		fields = ['name', 'email', ]
+		fields = ['name', ]
 
 	helper = FormHelper()
 	helper.form_method = 'POST'
@@ -26,9 +27,12 @@ class OrderForm(ModelForm):
 	helper.form_method = 'POST'
 	helper.add_input(Submit('submit', 'Register', css_class='btn-success'))
 
-
 class CreateUserForm(UserCreationForm):
 	class Meta:
 		model = User
 		fields = ['username', 'password1', 'password2']
 
+class CostumerProfileForm(ModelForm):
+	class Meta:
+		model = Order
+		fields = ['customer', 'product', 'status']
