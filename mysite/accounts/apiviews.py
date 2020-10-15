@@ -58,8 +58,6 @@ def createCustomerApi(request):
 	return Response(serializer.data, status=201)
 
 @api_view(['POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
 def createUserApi(request):
 	data = JSONParser().parse(request)
 	serializer = UserSerializer(data=data)
