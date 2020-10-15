@@ -22,18 +22,24 @@ urlpatterns = [
     path('create-order/<str:pk>/', views.createOrder1, name='create_order_pk'),
     path('update_order/<str:pk>/', views.updateOrder, name='update_order'),
     path('delete_order/<str:pk>/', views.deleteOrder, name='delete_order'),
-
-    path('logout-api/', apiviews.logoutUserApi, name='logout-api'),
-    path('create-user-api/', apiviews.createUserApi, name='create-user-api'),
-    path('login-api/', apiviews.loginApi, name='login-api'),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    path('customers-api/', apiviews.customersApi, name='customers-api'),
-    path('create-customer-api/', apiviews.createCustomerApi,name='create-customer-api'),
-    path('delete-customer-api/', apiviews.deleteCustomerApi, name='delete-customer-api'),
-
-    path('products-api/', apiviews.productsApi,name='products-api'),
     
-    path('delete-order-api/<str:pk>', apiviews.deleteOrderApi, name="delete_order-api"),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+
+    path('create-user-api/', apiviews.createUserApi, name='create-user-api'),
+    path('logout-api/', apiviews.logoutUserApi, name='logout-api'),
+    path('login-api/', apiviews.loginApi, name='login-api'),
+
+    path('customers-api/', apiviews.customersApi, name='customers-api'),
+    path('products-api/', apiviews.productsApi,name='products-api'),
+
+    path('update-product-api/<str:pk>/', apiviews.updateProductApi, name='update-product-api'),
+    path('delete-product-api/<str:pk>/', apiviews.deleteProductApi, name='delete-product-api'),
+
+    path('create-customer-api/', apiviews.createCustomerApi,name='create-customer-api'),
+    path('delete-customer-api/<str:pk>/', apiviews.deleteCustomerApi, name='delete-customer-api'),
+
+
+    path('delete-order-api/<str:pk>/', apiviews.deleteOrderApi, name="delete_order-api"),
     # path('update-order-api/<str:pk>', apiviews.updateOrderApi, name="update-order-api"),
 
     path('hello/', apiviews.hello, name='hello'),

@@ -82,7 +82,7 @@ def createUserApi(request):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def deleteCustomerApi(request, pk):
-	customer = Customer.objects.get(id=pk)
+	customer = Customer.objects.get(auto_increment_id=pk)
 	customer.delete()
 
 	return Response("Customer deleted!")
@@ -95,6 +95,26 @@ def deleteOrderApi(request, pk):
 	order.delete()
 
 	return Response("Order deleted!")
+
+@api_view(['DELETE'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def deleteProductApi(request, pk):
+	product = Product.objects.get(id=pk)
+	product.delete()
+
+	return Response("Product deleted!")
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))	
+def updateProductApi(request, pk):
+	product = Product.objects.get(id=pk)
+	serializer = ProductSerializerApi(request.POST, instance=product)
+	if serializer.is_valid():
+		serializer.save()
+
+	return Response(serializer.data)
 
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))
