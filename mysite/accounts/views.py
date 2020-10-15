@@ -6,27 +6,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from rest_framework.parsers import JSONParser
-from rest_framework.permissions import IsAuthenticated  
-from rest_framework.decorators import authentication_classes,permission_classes,api_view
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.response import Response
-
 from .models import *
-from .forms import OrderForm, CreateUserForm, CustomerForm, CostumerProfileForm
+from .forms import OrderForm, CreateUserForm, CustomerForm, CostumerProfileForm, ProductForm
 from .filters import OrderFilter
 
-
-from .serializers import CustomerSerializer, UserSerializer, LoginSerializer
 # Create your views here.
-
-@api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def hello(request):
-	context={'message':'hi'}
-	return Response(context)
-
 
 def registerPage(request):
 	if request.user.is_authenticated:
@@ -42,33 +26,6 @@ def registerPage(request):
 				return redirect('login')
 		context = {'form':form}
 		return render(request, 'accounts/register.html', context)
-
-
-@api_view(['POST'])
-@authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
-def createUserApi(request):
-	data = JSONParser().parse(request)
-	serializer = UserSerializer(data=data)
-	if serializer.is_valid():
-		serializer.save()
-		content = {'message': 'new User OK!'}
-		return Response(content, status=201)
-	else:
-		return Response(status=500)
-	return Response(serializer.errors, status=400)
-
-@api_view(['POST'])
-def loginApi(request):
-	data = JSONParser().parse(request)
-	serializer = LoginSerializer(data=data)
-	if serializer.is_valid():
-		content = { 'message': 'Logged'}
-		return Response(content, status=201)
-	else:
-		return Response(status=500)
-	context = {}
-	return render(request,'accounts/login.html', context)
 
 def loginPage(request):
 	if request.user.is_authenticated:
@@ -88,15 +45,10 @@ def loginPage(request):
 
 		context = {}
 		return render(request, 'accounts/login.html', context)
-@api_view(['POST'])
-def logoutUserApi(request):
-	logout(request)
-	return Response(status=200)
 
 def logoutUser(request):
 	logout(request)
 	return redirect('login')
-
 
 @login_required(login_url='login')
 def home(request):
@@ -128,17 +80,14 @@ def products(request):
 	return render(request, 'accounts/products.html', {'products':products})
 
 @login_required(login_url='login')
-def customer(request):
+def customer(request, pk):
+	customer = Customer.objects.get(auto_increment_id=pk)
 
 	orders = customer.order_set.all()
 	order_count = orders.count()
 
-	myFilter = OrderFilter(request.GET, queryset=orders)
-	orders = myFilter.qs 
-
-	context = {'customer':customer, 'orders':orders, 'order_count':order_count,
-	'myFilter':myFilter}
-	return render(request, 'accounts/customer.html',context)
+	context = {'customer':customer, 'orders':orders, 'order_count':order_count}
+	return render(request, 'accounts/customer.html', context)
 
 @login_required(login_url='login')
 def customerProfile(request, pk):
@@ -163,43 +112,64 @@ def createCustomer(request):
 	return render(request,'accounts/add_customer.html',context)
 
 @login_required(login_url='login')
-def createOrder1(request):
-	OrderFormSet = inlineformset_factory(Customer, Order, 
-		fields=('product', 'statu	s'), extra=10 )
-	customer = Customer.objects.all()
-	formset = OrderFormSet(queryset=Order.objects.none()
-		,instance=customer)
-	#form = OrderForm(initial={'customer':customer})
+def createOrder1(request, pk):
+	customer = Customer.objects.get(auto_increment_id=pk)
+	form = OrderForm(instance=customer)
 	if request.method == 'POST':
-		#print('Printing POST:', request.POST)
-		form = OrderForm(request.POST)
-		formset = OrderFormSet(request.POST, instance=customer)
-		if formset.is_valid():
-			formset.save()
+		form = OrderForm(request.POST, instance=customer)
+		if form.is_valid():
+			form.save()
 			return redirect('/')
-
-	context = {'form':formset}
+	context = {'form':form}
 	return render(request, 'accounts/order_form.html', context)
 
 @login_required(login_url='login')
 def createOrder(request):
-	#OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10 )
-	#customer = Customer.objects.all()
-	#formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
 	form = OrderForm()
 	if request.method == 'POST':
-		#print('Printing POST:', request.POST)
 		form = OrderForm(request.POST)
-		# formset = OrderFormSet(request.POST, instance=customer)
-		# if formset.is_valid():
-		# 	formset.save()
-		# 	return redirect('/')
 		if form.is_valid:
 			form.save()
 			return redirect('/')
 
 	context = {'form':form}
 	return render(request, 'accounts/order_form.html', context)
+
+@login_required
+def createProduct(request):
+	form = ProductForm()
+	if request.method == 'POST':
+		form = ProductForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+	context = {'form':form}
+	return render(request,'accounts/add_product.html', context)
+
+@login_required(login_url='login')
+def updateCustomer(request, pk):
+	customer = Customer.objects.get(auto_increment_id=pk)
+	form = CustomerForm(instance=customer)
+	if request.method == 'POST':
+		form = CustomerForm(request.POST, instance=customer)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	context = {'form':form}
+	return render(request,'accounts/add_customer.html', context)
+
+@login_required(login_url='login')
+def updateProduct(request, pk):
+	product = Product.objects.get(id=pk)
+	form = ProductForm(instance=product)
+	if request.method == 'POST':
+		form = ProductForm(request.POST, instance=product)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	context = { 'form': form}		
+	return render(request, 'accounts/add_product.html', context) 
 
 @login_required(login_url='login')
 def updateOrder(request, pk):
@@ -224,4 +194,13 @@ def deleteOrder(request, pk):
 		return redirect('/')
 
 	context = {'item':order}
-	return render(request, 'accounts/delete.html', context)
+	return render(request, 'accounts/delete_order.html', context)
+
+@login_required(login_url='login')
+def deleteProduct(request, pk):
+	product = Product.objects.get(id=pk)
+	if request.method == 'POST':
+		product.delete()
+		return redirect('/')
+	context = {'item':product}
+	return render(request, 'accounts/delete_product.html', context)

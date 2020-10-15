@@ -9,8 +9,8 @@
 		<div class="card card-body">
 			<h5>Customer:</h5>
 			<hr>
-			<a class="btn btn-outline-info  btn-sm btn-block" href="">Update Customer</a>
-			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'create_order' customer.id %}">Place Order</a>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'update_customer' customer.auto_increment_id %}">Update Customer</a>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'create_order_pk' customer.auto_increment_id %}">Place Order</a>
 
 		</div>
 	</div>
@@ -33,22 +33,6 @@
 	</div>
 </div>
 
-
-<br>
-<div class="row">
-	<div class="col">
-		<div class="card card-body">
-
-			<form method="get">
-				{{myFilter.form}}
-
-		    <button class="btn btn-primary" type="submit">Search</button>
-		  </form>
-
-		</div>
-	</div>
-	
-</div>
 <br>
 
 <div class="row">

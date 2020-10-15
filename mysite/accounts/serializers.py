@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Customer
+from .models import Customer, Order
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 
@@ -46,3 +46,14 @@ class CustomerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Customer
 		fields = ['name',  ]
+
+class CustomerSerializerApi(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['customer', 'product', 'status', 'note', ]
+    
