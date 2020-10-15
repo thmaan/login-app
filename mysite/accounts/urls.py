@@ -19,6 +19,7 @@ urlpatterns = [
     path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
     path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
 
+    path('logout-api/', views.logoutUserApi, name='logout-api'),
     path('create-user-api/', views.createUserApi, name='create-user-api'),
     path('login-api/', views.loginApi, name='login-api'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),

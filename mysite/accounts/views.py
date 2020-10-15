@@ -88,6 +88,10 @@ def loginPage(request):
 
 		context = {}
 		return render(request, 'accounts/login.html', context)
+@api_view(['POST'])
+def logoutUserApi(request):
+	logout(request)
+	return Response(status=200)
 
 def logoutUser(request):
 	logout(request)
@@ -114,7 +118,7 @@ def home(request):
 @login_required(login_url='login')
 def customers(request):
 	customers = Customer.objects.all()
-	
+
 	return render(request,'accounts/customers.html',{'customers':customers})
 
 @login_required(login_url='login')
@@ -125,7 +129,6 @@ def products(request):
 
 @login_required(login_url='login')
 def customer(request):
-	customer = Customer.objects.get(id=pk_test)
 
 	orders = customer.order_set.all()
 	order_count = orders.count()
