@@ -32,6 +32,7 @@ urlpatterns = [
     path('customers-api/', apiviews.customersApi, name='customers-api'),
     path('products-api/', apiviews.productsApi,name='products-api'),
 
+    path('create-product-api/', apiviews.createProductApi,name='create-product-api'),
     path('update-product-api/<str:pk>/', apiviews.updateProductApi, name='update-product-api'),
     path('delete-product-api/<str:pk>/', apiviews.deleteProductApi, name='delete-product-api'),
 

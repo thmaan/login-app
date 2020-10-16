@@ -67,6 +67,19 @@ def createCustomerApi(request):
 	return Response(serializer.data, status=201)
 
 @api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def createProductApi(request):
+	serializer = ProductSerializerApi(data=request.data)
+	if serializer.is_valid():
+		serializer.save()
+		content = {'message': 'new product OK!'}
+		return Response(content, status=201)
+	else:
+		return Response(status=500)
+	return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
 def createUserApi(request):
 	data = JSONParser().parse(request)
 	serializer = UserSerializer(data=data)
