@@ -123,7 +123,7 @@ def deleteProductApi(request, pk):
 @permission_classes((IsAuthenticated,))	
 def updateProductApi(request, pk):
 	product = Product.objects.get(id=pk)
-	serializer = ProductSerializerApi(request.POST, instance=product)
+	serializer = ProductSerializerApi(instance=product,data=request.data)
 	if serializer.is_valid():
 		serializer.save()
 
@@ -134,7 +134,7 @@ def updateProductApi(request, pk):
 @permission_classes((IsAuthenticated,))
 def updateOrderApi(request, pk):
 	order = Order.objects.get(id=pk)
-	serializer = OrderSerializer(request.POST, instance=order)
+	serializer = OrderSerializer(instance=order,dat=request.data)
 
 	if serializer.is_valid():
 		serializer.save()
