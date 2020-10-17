@@ -1,7 +1,6 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
-from . import views, apiviews
-
+from . import views
 
 urlpatterns = [
 	path('register/', views.registerPage, name="register"),
@@ -24,24 +23,4 @@ urlpatterns = [
     path('delete_order/<str:pk>/', views.deleteOrder, name='delete_order'),
     
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-
-    path('create-user-api/', apiviews.createUserApi, name='create-user-api'),
-    path('logout-api/', apiviews.logoutUserApi, name='logout-api'),
-    path('login-api/', apiviews.loginApi, name='login-api'),
-
-    path('customers-api/', apiviews.customersApi, name='customers-api'),
-    path('products-api/', apiviews.productsApi,name='products-api'),
-
-    path('create-product-api/', apiviews.createProductApi,name='create-product-api'),
-    path('update-product-api/<str:pk>/', apiviews.updateProductApi, name='update-product-api'),
-    path('delete-product-api/<str:pk>/', apiviews.deleteProductApi, name='delete-product-api'),
-
-    path('create-customer-api/', apiviews.createCustomerApi,name='create-customer-api'),
-    path('delete-customer-api/<str:pk>/', apiviews.deleteCustomerApi, name='delete-customer-api'),
-
-
-    path('delete-order-api/<str:pk>/', apiviews.deleteOrderApi, name="delete_order-api"),
-    # path('update-order-api/<str:pk>', apiviews.updateOrderApi, name="update-order-api"),
-
-    path('hello/', apiviews.hello, name='hello'),
 ]
