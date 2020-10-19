@@ -12,6 +12,7 @@ from .models import *
 
 from .serializers import CustomerSerializer, UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer, ProductSerializerApi
 
+from accounts.models import *
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))

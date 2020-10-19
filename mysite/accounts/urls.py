@@ -14,8 +14,8 @@ urlpatterns = [
     path('customer/<str:pk>/', views.customer, name='customer'),
     path('create_customer/', views.createCustomer, name='create_customer'),
     path('update_customer/<str:pk>/', views.updateCustomer, name='update_customer'),
-    path('update_product/<str:pk>', views.updateProduct, name='update_product'),
-    path('delete_product/<str:pk>', views.deleteProduct, name='delete_product'),
+    path('update_product/<str:pk>/', views.updateProduct, name='update_product'),
+    path('delete_product/<str:pk>/', views.deleteProduct, name='delete_product'),
 
     path('create_order/', views.createOrder , name="create_order"),
     path('create-order/<str:pk>/', views.createOrder1, name='create_order_pk'),
