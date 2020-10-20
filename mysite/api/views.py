@@ -27,8 +27,8 @@ def hello(request):
 	pending = orders.filter(status='Pending').count()
 
 	context={'total_orders':total_orders,'delivered':delivered,
-	'pending':pending}
-	
+	'pending':pending,'total_customers':total_customers}
+
 	return Response(context,status=201)
 
 @api_view(['POST'])
