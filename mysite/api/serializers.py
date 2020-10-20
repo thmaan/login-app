@@ -42,10 +42,6 @@ class LoginSerializer(serializers.ModelSerializer):
         else:             
             return super(LoginSerializer, self).validate(data)
 
-class CustomerSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Customer
-		fields = ['name',  ]
 
 class CustomerSerializerApi(serializers.ModelSerializer):
     class Meta:
@@ -62,3 +58,8 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['customer', 'product', 'status', 'note', ]
     
+class DashboardSerializer(serializers.ModelSerializer):
+    total_customers = serializers.FloatField()
+    total_orders = serializers.FloatField()
+    delivered = serializers.FloatField() 
+    pending = serializers.FloatField()

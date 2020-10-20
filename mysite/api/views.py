@@ -10,15 +10,26 @@ from rest_framework.response import Response
 
 from .models import *
 
-from .serializers import CustomerSerializer, UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer, ProductSerializerApi
+from .serializers import  UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer, ProductSerializerApi
 
 from accounts.models import *
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def hello(request):
-	context={'message':'hi from server'}
-	return Response(context)
+	orders = Order.objects.all()
+	customers = Customer.objects.all()
+
+	total_customers = customers.count()
+
+	total_orders = orders.count()
+	delivered = orders.filter(status='Delivered').count()
+	pending = orders.filter(status='Pending').count()
+
+	context={'total_orders':total_orders,'delivered':delivered,
+	'pending':pending}
+	
+	return Response(context,status=201)
 
 @api_view(['POST'])
 def loginApi(request):
