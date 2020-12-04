@@ -23,4 +23,6 @@ urlpatterns = [
     path('delete_order/<str:pk>/', views.deleteOrder, name='delete_order'),
     
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    
+    path('create-category/', views.createCategory, name='create_category'),
 ]

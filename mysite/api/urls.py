@@ -20,9 +20,10 @@ urlpatterns = [
     path('create-customer-api/', views.createCustomerApi,name='create-customer-api'),
     path('delete-customer-api/<str:pk>/', views.deleteCustomerApi, name='delete-customer-api'),
 
-
     path('delete-order-api/<str:pk>/', views.deleteOrderApi, name="delete_order-api"),
     # path('update-order-api/<str:pk>', views.updateOrderApi, name="update-order-api"),
 
+    path('create-category-api/', views.createCategoryApi, name ='create-category-api'),
+    
     path('hello/', views.hello, name='hello'),
 ]

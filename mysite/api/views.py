@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 from .models import *
 
-from .serializers import  UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer, ProductSerializerApi
+from .serializers import  CategorySerializer, UserSerializer, LoginSerializer, CustomerSerializerApi, OrderSerializer, ProductSerializerApi
 
 from accounts.models import *
 @api_view(['GET'])
@@ -152,3 +152,10 @@ def updateOrderApi(request, pk):
 		serializer.save()
 
 	return Response(serializer.data)
+
+@api_view(['GET'])
+def createCategoryApi(request):
+	categories = Category.objects.all()
+	serializer = CategorySerializer(categories, many=True)
+	
+	return Response(serializer.data, status=201)

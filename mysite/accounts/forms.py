@@ -4,10 +4,18 @@ from django.contrib.auth.models import User
 from django import forms
 
 from .models import Order, Customer, Product
-
+from api.models import Category
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+class CategoryForm(ModelForm):
+	class Meta:
+		model = Category
+		fields ='__all__'
+
+	helper = FormHelper()
+	helper.form_method = 'POST'
+	helper.add_input(Submit('submit', 'Register', css_class='btn-success'))
 
 class CustomerForm(ModelForm):
 	class Meta:

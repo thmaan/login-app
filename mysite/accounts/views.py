@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-from .forms import OrderForm, CreateUserForm, CustomerForm, CostumerProfileForm, ProductForm
+from .forms import CategoryForm, OrderForm, CreateUserForm, CustomerForm, CostumerProfileForm, ProductForm
 from .filters import OrderFilter
 
 # Create your views here.
@@ -147,6 +147,17 @@ def createProduct(request):
 	context = {'form':form}
 	return render(request,'accounts/add_product.html', context)
 
+def createCategory(request):
+	form = CategoryForm()
+	if request.method == 'POST':
+		form = CategoryForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+	context = {'form':form}
+	return render(request,'accounts/add_product.html', context)
+	
 @login_required(login_url='login')
 def updateCustomer(request, pk):
 	customer = Customer.objects.get(auto_increment_id=pk)

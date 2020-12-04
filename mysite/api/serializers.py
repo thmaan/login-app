@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from accounts.models import Customer, Order, Product
+from .models import Category
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 
@@ -58,8 +59,13 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['customer', 'product', 'status', 'note', ]
     
-class DashboardSerializer(serializers.ModelSerializer):
+class DashboardSerializer(serializers.Serializer):
     total_customers = serializers.FloatField()
     total_orders = serializers.FloatField()
     delivered = serializers.FloatField() 
     pending = serializers.FloatField()
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
